@@ -10,6 +10,10 @@
  *   Date: 02 Feb 2007
  */
 		  	
+#include <iostream>
+using std::cout;
+using std::endl;
+
 #include "image.h"
 #include "scene.h"
 
