@@ -57,7 +57,7 @@ void Scene::clear() {
         if (imgs[i] != NULL) delete imgs[i];
 
     delete[] imgs;
-    delete[] xs; delete ys;
+    delete[] xs; delete[] ys;
 }
 
 void Scene::copy(const Scene &source) {
@@ -77,7 +77,7 @@ void Scene::copy(const Scene &source) {
  * Modifies the size of the array of Image pointers without changing their indices.
 **/
 void Scene::changemaxlayers(int newmax) {
-    for (int i = max; i < newmax; ++i)
+    for (int i = newmax; i < max; ++i)
         if (imgs[i] != NULL) {
             cout << "invalid newmax" << endl;
             return;
@@ -93,6 +93,12 @@ void Scene::changemaxlayers(int newmax) {
 
     for (int i = max; i < newmax; ++i)
         newimgs[i] = NULL;    
+
+    delete[] imgs;
+    delete[] xs; delete[] ys;
+
+    imgs = newimgs;
+    xs = newxs; ys = newys;
 }
 
 /**
@@ -184,8 +190,8 @@ Image Scene::drawscene() const {
         if (maxy > maxh) maxh = maxy;
     }
 
-    Image *img = new Image();
-    img->resize(maxw, maxh);
+    Image img;
+    img.resize(maxw, maxh);
 
     for (int i = 0; i < max; ++i) {
         if (imgs[i] == NULL) continue;
@@ -194,10 +200,10 @@ Image Scene::drawscene() const {
 
         for (int x = 0; x < w; ++x)
             for (int y = 0; y < h; ++y)
-                *(*img)(xs[i] + x, ys[i] + y) = *(*imgs[i])(x, y);
+                *img(xs[i] + x, ys[i] + y) = *(*imgs[i])(x, y);
     }
 
-    return *img;
+    return img;
 }
 
 bool Scene::valid(int i) const {
