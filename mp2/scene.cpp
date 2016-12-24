@@ -66,10 +66,11 @@ void Scene::copy(const Scene &source) {
     imgs = new Image*[max];
     xs = new int[max]; ys = new int[max];
 
-    for (int i = 0; i < max; ++i) {
-        imgs[i] = new Image(*source.imgs[i]);
-        xs[i] = source.xs[i]; ys[i] = source.ys[i];
-    }
+    for (int i = 0; i < max; ++i)
+        if (source.imgs[i] != NULL) {
+            imgs[i] = new Image(*source.imgs[i]);
+            xs[i] = source.xs[i]; ys[i] = source.ys[i];
+        } else imgs[i] = NULL;
 }
 
 /**
